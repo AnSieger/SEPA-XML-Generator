@@ -359,6 +359,45 @@
       margin-top: 1rem;
     }
     
+    .disclaimer {
+      background: rgba(255, 193, 7, 0.1);
+      border: 2px solid rgba(255, 193, 7, 0.3);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 2rem 0;
+      color: white;
+    }
+    
+    .disclaimer h3 {
+      color: #ffc107;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .disclaimer p {
+      line-height: 1.6;
+      margin-bottom: 0.8rem;
+      opacity: 0.9;
+    }
+    
+    .disclaimer ul {
+      margin: 1rem 0;
+      padding-left: 1.5rem;
+    }
+    
+    .disclaimer li {
+      margin-bottom: 0.5rem;
+      opacity: 0.9;
+    }
+    
+    .disclaimer .warning-text {
+      font-weight: 600;
+      color: #ffc107;
+    }
+    
     @media (max-width: 768px) {
       .container {
         padding: 1rem;
@@ -400,7 +439,6 @@
       </div>
     </div>
     
-    <!-- Form for creditor data -->
     <div class="card">
       <h2>💼 Creditor Data</h2>
   <form id="creditorForm">
@@ -583,6 +621,9 @@
       
       <div class="footer-note">
         <p>Made with ❤️ by AnSieger | All data processed locally | No tracking, no cookies</p>
+        <p style="margin-top: 1rem; font-weight: 600; color: #ffc107;">
+          ⚠️ No warranty provided - Use at your own risk - Always verify generated files before banking submission
+        </p>
       </div>
     </div>
   </div>
