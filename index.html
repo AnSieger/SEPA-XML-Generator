@@ -5,158 +5,453 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SEPA-XML Generator (with BLZ -> BIC Lookup, pain.008.001.08)</title>
   <style>
-    body {
-      font-family: sans-serif;
-      margin: 2rem;
+    * {
+      box-sizing: border-box;
     }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      color: #333;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 3rem;
+    }
+    
+    .header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+    
+    .header p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    
+    .card h2 {
+      color: #4a5568;
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 0.5rem;
+    }
+    
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
     label {
       display: block;
-      margin-top: 1rem;
-      font-weight: bold;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #4a5568;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
-    input, select, button {
-      margin-top: 0.5rem;
-      padding: 0.5rem;
-      font-size: 1rem;
+    
+    input, select {
       width: 100%;
-      max-width: 400px;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      background: #f7fafc;
     }
-    .error {
-      color: red;
-      font-size: 0.9rem;
+    
+    input:focus, select:focus {
+      outline: none;
+      border-color: #667eea;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
     }
-    .success {
-      color: green;
-      font-size: 0.9rem;
+    
+    button {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 0.75rem 2rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
     }
-    hr {
+    
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
+    
+    button:active {
+      transform: translateY(0);
+    }
+    
+    .primary-button {
+      background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+      box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
+      padding: 1rem 3rem;
+      font-size: 1.1rem;
       margin: 2rem 0;
     }
+    
+    .primary-button:hover {
+      box-shadow: 0 6px 20px rgba(72, 187, 120, 0.4);
+    }
+    
+    .file-input-wrapper {
+      position: relative;
+      display: inline-block;
+      width: 100%;
+    }
+    
+    .file-input-wrapper input[type="file"] {
+      position: absolute;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+    
+    .file-input-display {
+      display: block;
+      padding: 0.75rem 1rem;
+      background: #f7fafc;
+      border: 2px dashed #cbd5e0;
+      border-radius: 8px;
+      text-align: center;
+      color: #718096;
+      transition: all 0.3s ease;
+    }
+    
+    .file-input-wrapper:hover .file-input-display {
+      border-color: #667eea;
+      background: #edf2f7;
+    }
+    
+    .error {
+      color: #e53e3e;
+      font-size: 0.9rem;
+      background: #fed7d7;
+      padding: 0.5rem;
+      border-radius: 6px;
+      border-left: 4px solid #e53e3e;
+    }
+    
+    .success {
+      color: #38a169;
+      font-size: 0.9rem;
+      background: #c6f6d5;
+      padding: 0.5rem;
+      border-radius: 6px;
+      border-left: 4px solid #38a169;
+    }
+    
     .hidden {
       display: none;
     }
-    table {
-      margin-top: 1rem;
-      border-collapse: collapse;
-      width: 100%;
-      max-width: 800px;
+    
+    .csv-format {
+      background: #2d3748;
+      color: #e2e8f0;
+      padding: 1rem;
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      overflow-x: auto;
+      margin: 1rem 0;
     }
-    th, td {
-      border: 1px solid #ccc;
-      padding: 0.5rem;
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1.5rem;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    
+    th {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 1rem;
       text-align: left;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-size: 0.85rem;
+    }
+    
+    td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    
+    tr:hover {
+      background: #f7fafc;
+    }
+    
+    .options-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    
+    .option-card {
+      background: #f7fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+    
+    .option-card h3 {
+      color: #4a5568;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+    
+    .divider {
+      height: 2px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      margin: 3rem 0;
+      border-radius: 1px;
+      opacity: 0.3;
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 1rem;
+      }
+      
+      .header h1 {
+        font-size: 2rem;
+      }
+      
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .options-section {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      
+      .card {
+        padding: 1.5rem;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>SEPA-XML Generator (pain.008.001.08) with BLZ-&gt;BIC Lookup</h1>
-  <p>
-    This tool reads a .csv file and generates a SEPA XML.
-    Additionally, for German IBANs, the BIC can be automatically determined from the BLZ.
-    <br>
-  </p>
-  
-  <!-- Form for creditor data -->
-  <h2>Creditor Data</h2>
+  <div class="container">
+    <div class="header">
+      <h1>SEPA-XML Generator</h1>
+      <p>
+        This tool reads a .csv file and generates a SEPA XML with BLZ→BIC lookup for German IBANs.
+        All data is processed locally in your browser for maximum security.
+      </p>
+    </div>
+    
+    <!-- Form for creditor data -->
+    <div class="card">
+      <h2>💼 Creditor Data</h2>
   <form id="creditorForm">
-    <label for="creditorName">Creditor Name</label>
-    <input type="text" id="creditorName" required />
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="creditorName">Creditor Name</label>
+        <input type="text" id="creditorName" required />
+      </div>
 
-    <label for="creditorIBAN">Creditor IBAN</label>
-    <input type="text" id="creditorIBAN" required />
+      <div class="form-group">
+        <label for="creditorIBAN">Creditor IBAN</label>
+        <input type="text" id="creditorIBAN" required />
+      </div>
 
-    <label for="creditorBIC">Creditor BIC (will be automatically detected if possible)</label>
-    <input type="text" id="creditorBIC" required />
+      <div class="form-group">
+        <label for="creditorBIC">Creditor BIC</label>
+        <input type="text" id="creditorBIC" required placeholder="Will be auto-detected for German IBANs" />
+      </div>
 
-    <label for="creditorId">Creditor Identifier</label>
-    <input type="text" id="creditorId" required />
+      <div class="form-group">
+        <label for="creditorId">Creditor Identifier</label>
+        <input type="text" id="creditorId" required />
+      </div>
 
-    <label for="paymentInfoId">Payment Info ID (e.g., RE-2023-001)</label>
-    <input type="text" id="paymentInfoId" required />
+      <div class="form-group">
+        <label for="paymentInfoId">Payment Info ID</label>
+        <input type="text" id="paymentInfoId" required placeholder="e.g., RE-2023-001" />
+      </div>
 
-    <label for="executionDate">Execution Date (YYYY-MM-DD)</label>
-    <input type="date" id="executionDate" required />
+      <div class="form-group">
+        <label for="executionDate">Execution Date</label>
+        <input type="date" id="executionDate" required />
+      </div>
 
-    <label for="currency">Currency</label>
-    <input type="text" id="currency" value="EUR" required />
+      <div class="form-group">
+        <label for="currency">Currency</label>
+        <input type="text" id="currency" value="EUR" required />
+      </div>
 
-    <!-- NEW: Dropdown for Sequence Type -->
-    <label for="sequenceType">Sequence Type (e.g., FRST, RCUR, OOFF, FNAL)</label>
-    <select id="sequenceType">
-      <option value="FRST">First Direct Debit (FRST)</option>
-      <option value="RCUR" selected>Recurring Direct Debit (RCUR)</option>
-      <option value="OOFF">One-Off Direct Debit (OOFF)</option>
-      <option value="FNAL">Final Direct Debit (FNAL)</option>
-    </select>
+      <div class="form-group">
+        <label for="sequenceType">Sequence Type</label>
+        <select id="sequenceType">
+          <option value="FRST">First Direct Debit (FRST)</option>
+          <option value="RCUR" selected>Recurring Direct Debit (RCUR)</option>
+          <option value="OOFF">One-Off Direct Debit (OOFF)</option>
+          <option value="FNAL">Final Direct Debit (FNAL)</option>
+        </select>
+      </div>
+    </div>
 
     <button type="button" id="addCreditorData">
-      Save Creditor Data
+      💾 Save Creditor Data
     </button>
   </form>
+    </div>
 
-  <hr/>
+    <div class="divider"></div>
 
-  <!-- Section for uploading CSV with debtor data -->
-  <h2>Add Debtors/Direct Debit Mandates</h2>
-  <p>Option A: Upload a CSV file (debtors) with the following format:</p>
-  <pre>First Name;Last Name;Amount;IBAN;Purpose;Mandate;Identification;Issue Date (YYYY-MM-DD format)</pre>
-  <input type="file" id="csvFileInput" accept=".csv" />
+    <!-- Section for uploading CSV with debtor data -->
+    <div class="card">
+      <h2>📋 Add Debtors/Direct Debit Mandates</h2>
+      
+      <div class="options-section">
+        <div class="option-card">
+          <h3>📁 Option A: Upload CSV File</h3>
+          <p>Upload a CSV file with debtor data using this format:</p>
+          <div class="csv-format">First Name;Last Name;Amount;IBAN;Purpose;Mandate;Identification;Issue Date (YYYY-MM-DD)</div>
+          
+          <div class="file-input-wrapper">
+            <input type="file" id="csvFileInput" accept=".csv" />
+            <span class="file-input-display">📎 Click to select CSV file or drag & drop</span>
+          </div>
+        </div>
 
-  <table id="debtorTable" class="hidden">
-    <thead>
-      <tr>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Amount</th>
-        <th>IBAN</th>
-        <th>BIC</th>
-        <th>Purpose</th>
-        <th>Mandate</th>
-        <th>Identification</th>
-        <th>Issue Date</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+        <div class="option-card">
+          <h3>✏️ Option B: Manual Entry</h3>
+          <p>Add individual debtor records using the form below.</p>
+        </div>
+      </div>
 
-  <p>Option B: Form for individual debtor records:</p>
+      <table id="debtorTable" class="hidden">
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Amount</th>
+            <th>IBAN</th>
+            <th>BIC</th>
+            <th>Purpose</th>
+            <th>Mandate</th>
+            <th>Identification</th>
+            <th>Issue Date</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>👤 Individual Debtor Entry</h2>
   <form id="debtorForm">
-    <label for="firstName">First Name</label>
-    <input type="text" id="firstName" />
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="firstName">First Name</label>
+        <input type="text" id="firstName" />
+      </div>
 
-    <label for="lastName">Last Name</label>
-    <input type="text" id="lastName" />
+      <div class="form-group">
+        <label for="lastName">Last Name</label>
+        <input type="text" id="lastName" />
+      </div>
 
-    <label for="amount">Amount</label>
-    <input type="number" id="amount" step="0.01" />
+      <div class="form-group">
+        <label for="amount">Amount (€)</label>
+        <input type="number" id="amount" step="0.01" />
+      </div>
 
-    <label for="debtorIBAN">IBAN</label>
-    <input type="text" id="debtorIBAN" />
+      <div class="form-group">
+        <label for="debtorIBAN">IBAN</label>
+        <input type="text" id="debtorIBAN" />
+      </div>
 
-    <label for="debtorBIC">BIC (will be automatically determined if possible)</label>
-    <input type="text" id="debtorBIC" />
+      <div class="form-group">
+        <label for="debtorBIC">BIC</label>
+        <input type="text" id="debtorBIC" placeholder="Auto-detected for German IBANs" />
+      </div>
 
-    <label for="usage">Purpose</label>
-    <input type="text" id="usage" />
+      <div class="form-group">
+        <label for="usage">Purpose</label>
+        <input type="text" id="usage" />
+      </div>
 
-    <label for="mandateId">Mandate Reference</label>
-    <input type="text" id="mandateId" />
+      <div class="form-group">
+        <label for="mandateId">Mandate Reference</label>
+        <input type="text" id="mandateId" />
+      </div>
 
-    <label for="debtorId">Debtor Identification (EndToEndId)</label>
-    <input type="text" id="debtorId" />
+      <div class="form-group">
+        <label for="debtorId">Debtor ID (EndToEndId)</label>
+        <input type="text" id="debtorId" />
+      </div>
 
-    <label for="mandateDate">Issue Date</label>
-    <input type="date" id="mandateDate" />
+      <div class="form-group">
+        <label for="mandateDate">Issue Date</label>
+        <input type="date" id="mandateDate" />
+      </div>
+    </div>
 
-    <button type="button" id="addDebtorData">Add This Record</button>
+    <button type="button" id="addDebtorData">➕ Add This Record</button>
   </form>
   <p id="debtorFormMessage" class="error hidden"></p>
+    </div>
 
-  <hr/>
+    <div class="divider"></div>
 
-  <!-- Generate SEPA-XML -->
-  <button id="generateXmlButton">Generate SEPA-XML (pain.008.001.08)</button>
-  <p id="generationMessage" class="hidden"></p>
+    <!-- Generate SEPA-XML -->
+    <div class="card" style="text-align: center;">
+      <h2>🚀 Generate SEPA XML</h2>
+      <button id="generateXmlButton" class="primary-button">📄 Generate SEPA-XML (pain.008.001.08)</button>
+      <p id="generationMessage" class="hidden"></p>
+    </div>
+  </div>
 
   <script>
     /*******************************************************
@@ -285,6 +580,23 @@
      * 2) READ CSV FILE (DEBTORS)
      *******************************************************/
     document.getElementById('csvFileInput').addEventListener('change', handleCSVUpload);
+    
+    // Update file input display
+    document.getElementById('csvFileInput').addEventListener('change', function(e) {
+      const fileDisplay = document.querySelector('.file-input-display');
+      if (e.target.files.length > 0) {
+        fileDisplay.textContent = `📁 Selected: ${e.target.files[0].name}`;
+        fileDisplay.style.borderColor = '#48bb78';
+        fileDisplay.style.background = '#c6f6d5';
+        fileDisplay.style.color = '#38a169';
+      } else {
+        fileDisplay.textContent = '📎 Click to select CSV file or drag & drop';
+        fileDisplay.style.borderColor = '#cbd5e0';
+        fileDisplay.style.background = '#f7fafc';
+        fileDisplay.style.color = '#718096';
+      }
+    });
+    
     function handleCSVUpload(event) {
       const file = event.target.files[0];
       if (!file) return;
