@@ -1,7 +1,7 @@
 # SEPA-XML-Generator
-CSV File to SEPA XML Generator,
+CSV File to SEPA XML Generator
 
-Daten werden alle lokal im Browser verarbeitet.
-Keine Cookies oder Tracker.
+All data is processed locally in the browser.
+No cookies or trackers.
 
 [Website](https://ansieger.github.io/SEPA-XML-Generator/)

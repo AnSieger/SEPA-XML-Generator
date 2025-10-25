@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SEPA-XML Generator (mit BLZ -> BIC Lookup, pain.008.001.08)</title>
+  <title>SEPA-XML Generator (with BLZ -> BIC Lookup, pain.008.001.08)</title>
   <style>
     body {
       font-family: sans-serif;
@@ -49,126 +49,126 @@
   </style>
 </head>
 <body>
-  <h1>SEPA-XML Generator (pain.008.001.08) mit BLZ-&gt;BIC Lookup</h1>
+  <h1>SEPA-XML Generator (pain.008.001.08) with BLZ-&gt;BIC Lookup</h1>
   <p>
-    Dieses Tool liest eine .csv Datei ein und erzeugt eine SEPA XML.
-    Zudem kann bei deutschen IBANs aus der BLZ die BIC automatisch bestimmen.
+    This tool reads a .csv file and generates a SEPA XML.
+    Additionally, for German IBANs, the BIC can be automatically determined from the BLZ.
     <br>
   </p>
   
-  <!-- Formular für Gläubiger-Daten -->
-  <h2>Gläubiger-Daten</h2>
+  <!-- Form for creditor data -->
+  <h2>Creditor Data</h2>
   <form id="creditorForm">
-    <label for="creditorName">Name des Gläubigers</label>
+    <label for="creditorName">Creditor Name</label>
     <input type="text" id="creditorName" required />
 
-    <label for="creditorIBAN">IBAN des Gläubigers</label>
+    <label for="creditorIBAN">Creditor IBAN</label>
     <input type="text" id="creditorIBAN" required />
 
-    <label for="creditorBIC">BIC des Gläubigers (wird ggf. automatisch erkannt)</label>
+    <label for="creditorBIC">Creditor BIC (will be automatically detected if possible)</label>
     <input type="text" id="creditorBIC" required />
 
-    <label for="creditorId">Gläubiger-Identifikationsnummer (Creditor Identifier)</label>
+    <label for="creditorId">Creditor Identifier</label>
     <input type="text" id="creditorId" required />
 
-    <label for="paymentInfoId">Payment Info ID (z.B. RE-2023-001)</label>
+    <label for="paymentInfoId">Payment Info ID (e.g., RE-2023-001)</label>
     <input type="text" id="paymentInfoId" required />
 
-    <label for="executionDate">Ausführungsdatum (YYYY-MM-DD)</label>
+    <label for="executionDate">Execution Date (YYYY-MM-DD)</label>
     <input type="date" id="executionDate" required />
 
-    <label for="currency">Währung</label>
+    <label for="currency">Currency</label>
     <input type="text" id="currency" value="EUR" required />
 
-    <!-- NEU: Dropdown für Sequence Type -->
-    <label for="sequenceType">Sequence Type (z.B. FRST, RCUR, OOFF, FNAL)</label>
+    <!-- NEW: Dropdown for Sequence Type -->
+    <label for="sequenceType">Sequence Type (e.g., FRST, RCUR, OOFF, FNAL)</label>
     <select id="sequenceType">
-      <option value="FRST">Erstlastschrift (FRST)</option>
-      <option value="RCUR" selected>Folgelastschrift (RCUR)</option>
-      <option value="OOFF">Einmallastschrift (OOFF)</option>
-      <option value="FNAL">Abschlusslastschrift (FNAL)</option>
+      <option value="FRST">First Direct Debit (FRST)</option>
+      <option value="RCUR" selected>Recurring Direct Debit (RCUR)</option>
+      <option value="OOFF">One-Off Direct Debit (OOFF)</option>
+      <option value="FNAL">Final Direct Debit (FNAL)</option>
     </select>
 
     <button type="button" id="addCreditorData">
-      Gläubiger-Daten übernehmen
+      Save Creditor Data
     </button>
   </form>
 
   <hr/>
 
-  <!-- Bereich zum Hochladen einer CSV mit Debitor-Daten -->
-  <h2>Debitoren/Lastschriftmandate hinzufügen</h2>
-  <p>Option A: Lade eine CSV-Datei (Debitoren) hoch (Format):</p>
-  <pre>Vorname;Name;Betrag;IBAN;Verwendungszweck;Mandat;Identifikation;Erteilung (Datum im Format YYYY-MM-DD)</pre>
+  <!-- Section for uploading CSV with debtor data -->
+  <h2>Add Debtors/Direct Debit Mandates</h2>
+  <p>Option A: Upload a CSV file (debtors) with the following format:</p>
+  <pre>First Name;Last Name;Amount;IBAN;Purpose;Mandate;Identification;Issue Date (YYYY-MM-DD format)</pre>
   <input type="file" id="csvFileInput" accept=".csv" />
 
   <table id="debtorTable" class="hidden">
     <thead>
       <tr>
-        <th>Vorname</th>
-        <th>Name</th>
-        <th>Betrag</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Amount</th>
         <th>IBAN</th>
         <th>BIC</th>
-        <th>Verwendungszweck</th>
-        <th>Mandat</th>
-        <th>Identifikation</th>
-        <th>Erteilung (Datum)</th>
+        <th>Purpose</th>
+        <th>Mandate</th>
+        <th>Identification</th>
+        <th>Issue Date</th>
       </tr>
     </thead>
     <tbody></tbody>
   </table>
 
-  <p>Option B: Formular für einzelne Debitor-Datensätze:</p>
+  <p>Option B: Form for individual debtor records:</p>
   <form id="debtorForm">
-    <label for="firstName">Vorname</label>
+    <label for="firstName">First Name</label>
     <input type="text" id="firstName" />
 
-    <label for="lastName">Nachname</label>
+    <label for="lastName">Last Name</label>
     <input type="text" id="lastName" />
 
-    <label for="amount">Betrag</label>
+    <label for="amount">Amount</label>
     <input type="number" id="amount" step="0.01" />
 
     <label for="debtorIBAN">IBAN</label>
     <input type="text" id="debtorIBAN" />
 
-    <label for="debtorBIC">BIC (wird ggf. automatisch ermittelt)</label>
+    <label for="debtorBIC">BIC (will be automatically determined if possible)</label>
     <input type="text" id="debtorBIC" />
 
-    <label for="usage">Verwendungszweck</label>
+    <label for="usage">Purpose</label>
     <input type="text" id="usage" />
 
-    <label for="mandateId">Mandatsreferenz</label>
+    <label for="mandateId">Mandate Reference</label>
     <input type="text" id="mandateId" />
 
-    <label for="debtorId">Debitor-Identifikation (EndToEndId)</label>
+    <label for="debtorId">Debtor Identification (EndToEndId)</label>
     <input type="text" id="debtorId" />
 
-    <label for="mandateDate">Erteilungsdatum</label>
+    <label for="mandateDate">Issue Date</label>
     <input type="date" id="mandateDate" />
 
-    <button type="button" id="addDebtorData">Diesen Datensatz hinzufügen</button>
+    <button type="button" id="addDebtorData">Add This Record</button>
   </form>
   <p id="debtorFormMessage" class="error hidden"></p>
 
   <hr/>
 
-  <!-- SEPA-XML generieren -->
-  <button id="generateXmlButton">SEPA-XML (pain.008.001.08) generieren</button>
+  <!-- Generate SEPA-XML -->
+  <button id="generateXmlButton">Generate SEPA-XML (pain.008.001.08)</button>
   <p id="generationMessage" class="hidden"></p>
 
   <script>
     /*******************************************************
-     * GLOBALE VARIABLEN
+     * GLOBAL VARIABLES
      *******************************************************/
     let creditorData = {};
     let debtorDataList = [];
-    // Hier speichern wir BLZ -> BIC
+    // Here we store BLZ -> BIC
     let blzBicMap = {};
 
     /*******************************************************
-     * BEI SEITENLADEN: BLZ->BIC CSV PARSEN
+     * ON PAGE LOAD: PARSE BLZ->BIC CSV
      *******************************************************/
     window.addEventListener('DOMContentLoaded', async () => {
       await loadBlzCsv();
@@ -178,27 +178,27 @@
       try {
         const response = await fetch('./blz-aktuell-csv-data.csv');
         if (!response.ok) {
-          console.error('Fehler beim Laden der BLZ-Datei:', response.status, response.statusText);
+          console.error('Error loading BLZ file:', response.status, response.statusText);
           return;
         }
         const csvText = await response.text();
         parseBlzCsv(csvText);
       } catch (err) {
-        console.error('Fehler beim Laden der BLZ-Datei:', err);
+        console.error('Error loading BLZ file:', err);
       }
     }
 
     function parseBlzCsv(csvText) {
       const lines = csvText.split(/\r?\n/).filter(line => line.trim() !== '');
-      // Erste Zeile ist i. d. R. Kopfzeile
+      // First line is usually the header
       let startIndex = 1;
 
       for (let i = startIndex; i < lines.length; i++) {
         const columns = lines[i].split(';');
         if (columns.length < 8) {
-          continue; // Ungültige Zeile
+          continue; // Invalid line
         }
-        // Bankleitzahl in Spalte 0, BIC in Spalte 7
+        // Bank code in column 0, BIC in column 7
         const blz = columns[0].replace(/"/g, '').trim();
         const bic = columns[7].replace(/"/g, '').trim();
 
@@ -206,7 +206,7 @@
           blzBicMap[blz] = bic;
         }
       }
-      console.log('BLZ->BIC Mapping geladen. Anzahl Einträge:', Object.keys(blzBicMap).length);
+      console.log('BLZ->BIC mapping loaded. Number of entries:', Object.keys(blzBicMap).length);
     }
 
     function extractBlzFromIban(iban) {
@@ -221,7 +221,7 @@
       return blzBicMap[blz] || null;
     }
 
-    // Einfache IBAN-Check
+    // Simple IBAN check
     function checkIBAN(iban) {
       const trimmed = iban.replace(/\s+/g, '').toUpperCase();
       const regex = /^[A-Z0-9]{15,34}$/;
@@ -229,7 +229,7 @@
     }
 
     /*******************************************************
-     * 1) GLÄUBIGER-DATEN SPEICHERN
+     * 1) SAVE CREDITOR DATA
      *******************************************************/
     document.getElementById('addCreditorData').addEventListener('click', () => {
       const name = document.getElementById('creditorName').value.trim();
@@ -242,29 +242,29 @@
       const seqType = document.getElementById('sequenceType').value;
 
       if (!name || !iban || !cid || !paymentInfoId || !executionDate || !currency) {
-        alert('Bitte alle Pflichtfelder ausfüllen (Name, IBAN, Gläubiger-ID, etc.)!');
+        alert('Please fill in all required fields (Name, IBAN, Creditor ID, etc.)!');
         return;
       }
 
       if (!checkIBAN(iban)) {
-        alert('IBAN ungültig!');
+        alert('Invalid IBAN!');
         return;
       }
 
-      // Falls BIC leer, versuche Lookup (wenn DE-IBAN)
+      // If BIC is empty, try lookup (if DE-IBAN)
       if (!bic) {
         const autoBic = lookupBicForIban(iban);
         if (autoBic) {
           bic = autoBic;
           document.getElementById('creditorBIC').value = bic;
         } else {
-          alert('Keine BIC gefunden für IBAN ' + iban);
+          alert('No BIC found for IBAN ' + iban);
         }
       }
 
-      // Minimal-Check BIC
+      // Minimal BIC check
       if (!bic) {
-        alert('Bitte eine BIC angeben oder Lookup verwenden!');
+        alert('Please provide a BIC or use lookup!');
         return;
       }
 
@@ -278,11 +278,11 @@
         currency,
         seqType
       };
-      alert('Gläubiger-Daten erfolgreich übernommen.');
+      alert('Creditor data successfully saved.');
     });
 
     /*******************************************************
-     * 2) CSV-DATEI (DEBITOREN) EINLESEN
+     * 2) READ CSV FILE (DEBTORS)
      *******************************************************/
     document.getElementById('csvFileInput').addEventListener('change', handleCSVUpload);
     function handleCSVUpload(event) {
@@ -312,7 +312,7 @@
       for (let i = startIndex; i < lines.length; i++) {
         const cols = lines[i].split(';');
         if (cols.length < 8) {
-          console.warn('Zeile hat zu wenig Spalten:', lines[i]);
+          console.warn('Line has too few columns:', lines[i]);
           continue;
         }
         const [
@@ -327,7 +327,7 @@
         ] = cols.map(c => c.replace(/"/g, '').trim());
 
         if (!checkIBAN(debtorIban)) {
-          console.warn('Ungültige IBAN in Zeile', i + 1, debtorIban);
+          console.warn('Invalid IBAN in line', i + 1, debtorIban);
           continue;
         }
         let autoBic = lookupBicForIban(debtorIban) || '';
@@ -374,7 +374,7 @@
     }
 
     /*******************************************************
-     * 3) EINZELNEN DEBITOR EINTRAGEN
+     * 3) ADD INDIVIDUAL DEBTOR
      *******************************************************/
     document.getElementById('addDebtorData').addEventListener('click', () => {
       const firstName = document.getElementById('firstName').value.trim();
@@ -392,27 +392,27 @@
       messageEl.classList.remove('success', 'error');
 
       if (!firstName || !lastName || !amount || !debtorIban || !usage || !mandateId || !debtorId || !mandateDate) {
-        messageEl.textContent = 'Bitte alle Felder ausfüllen!';
+        messageEl.textContent = 'Please fill in all fields!';
         messageEl.classList.remove('hidden');
         messageEl.classList.add('error');
         return;
       }
 
       if (isNaN(parseFloat(amount))) {
-        messageEl.textContent = 'Bitte einen gültigen Betrag angeben!';
+        messageEl.textContent = 'Please enter a valid amount!';
         messageEl.classList.remove('hidden');
         messageEl.classList.add('error');
         return;
       }
 
       if (!checkIBAN(debtorIban)) {
-        messageEl.textContent = 'Ungültige IBAN!';
+        messageEl.textContent = 'Invalid IBAN!';
         messageEl.classList.remove('hidden');
         messageEl.classList.add('error');
         return;
       }
 
-      // Falls BIC leer -> Lookup
+      // If BIC is empty -> Lookup
       if (!debtorBic) {
         const autoBic = lookupBicForIban(debtorIban);
         if (autoBic) {
@@ -433,7 +433,7 @@
         mandateDate
       });
 
-      messageEl.textContent = 'Datensatz hinzugefügt.';
+      messageEl.textContent = 'Record added.';
       messageEl.classList.remove('hidden');
       messageEl.classList.add('success');
 
@@ -442,7 +442,7 @@
     });
 
     /*******************************************************
-     * 4) SEPA-XML (pain.008.001.08) GENERIEREN
+     * 4) GENERATE SEPA-XML (pain.008.001.08)
      *******************************************************/
     document.getElementById('generateXmlButton').addEventListener('click', generateSEPA);
 
@@ -452,24 +452,24 @@
       msgEl.innerHTML = '';
 
       if (!creditorData.name) {
-        alert('Bitte zuerst Gläubiger-Daten ausfüllen!');
+        alert('Please fill in creditor data first!');
         return;
       }
       if (debtorDataList.length === 0) {
-        alert('Keine Debitoren-Daten vorhanden!');
+        alert('No debtor data available!');
         return;
       }
 
-      // Aktuelles Datum mit Uhrzeit (z. B. 2024-12-26T17:53:28Z)
+      // Current date with time (e.g., 2024-12-26T17:53:28Z)
       const now = new Date();
-      const isoDateTime = now.toISOString(); // z.B. 2024-12-26T17:53:28.123Z
-      // Wir kürzen oder wandeln ggf. ab, um kein Komma bei Millisekunden zu haben
+      const isoDateTime = now.toISOString(); // e.g., 2024-12-26T17:53:28.123Z
+      // We truncate or convert if necessary to avoid commas with milliseconds
       const creDtTm = isoDateTime.replace(/\.\d{3}Z$/, 'Z'); 
 
       // MessageId
       const messageId = `SEPA:${creDtTm}`;
 
-      // Anzahl und Summe
+      // Number and total
       const numberOfTxs = debtorDataList.length;
       const totalAmount = debtorDataList.reduce((acc, d) => acc + (isNaN(d.amount) ? 0 : d.amount), 0).toFixed(2);
 
@@ -533,7 +533,7 @@
         </Id>
       </CdtrSchmeId>`;
 
-      // Einträge für jeden Debitor
+      // Entries for each debtor
       debtorDataList.forEach((debtor) => {
         const amountFormatted = debtor.amount.toFixed(2);
         xml += `
@@ -556,7 +556,7 @@
           xml += `
             <BICFI>${debtor.debtorBic}</BICFI>`;
         } else {
-          // z. B. "NOTPROVIDED":
+          // e.g., "NOTPROVIDED":
           xml += `
             <Othr>
               <Id>NOTPROVIDED</Id>
@@ -585,7 +585,7 @@
   </CstmrDrctDbtInitn>
 </Document>`;
 
-      // Download anbieten
+      // Offer download
       const blob = new Blob([xml], { type: 'application/xml' });
       const fileName = `SEPA_${Date.now()}.xml`;
 
@@ -593,7 +593,7 @@
       const link = document.createElement('a');
       link.href = url;
       link.download = fileName;
-      link.textContent = `Hier klicken, um SEPA-XML (${fileName}) herunterzuladen.`;
+      link.textContent = `Click here to download SEPA-XML (${fileName}).`;
 
       msgEl.classList.remove('hidden');
       msgEl.appendChild(link);
