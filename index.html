@@ -255,6 +255,110 @@
       opacity: 0.3;
     }
     
+    .coffee-button {
+      background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+      color: white;
+      border: none;
+      padding: 0.8rem 2rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+      margin: 1rem 0;
+    }
+    
+    .coffee-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+      text-decoration: none;
+      color: white;
+    }
+    
+    .coffee-button:active {
+      transform: translateY(0);
+    }
+    
+    .support-section {
+      text-align: center;
+      margin: 2rem 0;
+      padding: 1.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .support-section p {
+      color: white;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+    
+    .footer {
+      text-align: center;
+      margin-top: 3rem;
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .footer h3 {
+      color: white;
+      margin-bottom: 1rem;
+      font-size: 1.3rem;
+    }
+    
+    .footer p {
+      color: white;
+      opacity: 0.8;
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+    
+    .support-options {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+    
+    .github-link {
+      background: linear-gradient(135deg, #24292e 0%, #1e2328 100%);
+      color: white;
+      text-decoration: none;
+      padding: 0.6rem 1.5rem;
+      border-radius: 20px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 4px 15px rgba(36, 41, 46, 0.3);
+    }
+    
+    .github-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(36, 41, 46, 0.4);
+      text-decoration: none;
+      color: white;
+    }
+    
+    .footer-note {
+      font-size: 0.9rem;
+      opacity: 0.7;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      padding-top: 1rem;
+      margin-top: 1rem;
+    }
+    
     @media (max-width: 768px) {
       .container {
         padding: 1rem;
@@ -287,6 +391,13 @@
         This tool reads a .csv file and generates a SEPA XML with BLZ→BIC lookup for German IBANs.
         All data is processed locally in your browser for maximum security.
       </p>
+      
+      <div class="support-section">
+        <p>☕ Enjoy this free tool? Support its development!</p>
+        <a href="https://www.buymeacoffee.com/ansieger" target="_blank" class="coffee-button">
+          ☕ Buy me a coffee
+        </a>
+      </div>
     </div>
     
     <!-- Form for creditor data -->
@@ -450,6 +561,29 @@
       <h2>🚀 Generate SEPA XML</h2>
       <button id="generateXmlButton" class="primary-button">📄 Generate SEPA-XML (pain.008.001.08)</button>
       <p id="generationMessage" class="hidden"></p>
+    </div>
+    
+    <!-- Support Footer -->
+    <div class="footer">
+      <h3>💝 Support This Project</h3>
+      <p>
+        This SEPA-XML Generator is completely free and open-source. If you find it useful, 
+        consider supporting its development and maintenance. Your support helps keep this tool 
+        free and continuously improved!
+      </p>
+      
+      <div class="support-options">
+        <a href="https://www.buymeacoffee.com/ansieger" target="_blank" class="coffee-button">
+          ☕ Buy me a coffee
+        </a>
+        <a href="https://github.com/AnSieger/SEPA-XML-Generator" target="_blank" class="github-link">
+          ⭐ Star on GitHub
+        </a>
+      </div>
+      
+      <div class="footer-note">
+        <p>Made with ❤️ by AnSieger | All data processed locally | No tracking, no cookies</p>
+      </div>
     </div>
   </div>
 
